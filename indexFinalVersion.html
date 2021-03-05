@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock Paper Scissors</title>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="weapon">
+            <h2>Choose your weapon:</h2>
+            <button id='paper'>Paper</button>
+            <button id='rock'>Rock</button>
+            <button id='scissors'>Scissors</button>
+        </div>
+        <div id='score'></div>
+    </div>        
+    <script>
+        let userScore = 0;
+        let computerScore = 0;
+        const compChoice = ['rock', 'paper', 'scissors'];
+        const buttons = document.querySelectorAll('button');
+        const div = document.querySelector('#score');
+        const weapon = document.querySelector('.weapon');
+
+        const para = document.createElement('p');
+        const score = document.createElement('h3');
+        const winner = document.createElement('h2');
+
+
+        function computerPlay() {
+            const random = Math.floor(Math.random() * compChoice.length);
+            return compChoice[random];
+        }
+        
+
+        function playRound(playerSelection, computerSelection){
+            if (playerSelection == 'rock' && computerSelection == 'rock'|| playerSelection == 'paper' && computerSelection == 'paper' || playerSelection == 'scissors' && computerSelection == 'scissors') {
+                para.textContent = 'It\'s a tie! Try again';
+            } else if (playerSelection == 'rock' && computerSelection == 'paper' || playerSelection == 'paper' && computerSelection == 'scissors' || playerSelection == 'scissors' && computerSelection == 'rock') {
+                para.textContent = `You lose! ${computerSelection} beats ${playerSelection}`;
+                return ++computerScore
+            } else if (playerSelection == 'rock' && computerSelection == 'scissors' || playerSelection == 'paper' && computerSelection == 'rock' || playerSelection == 'scissors' && computerSelection == 'paper') {
+                para.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
+                return ++userScore
+            } 
+        };
+
+        div.appendChild(para);
+        div.appendChild(score);
+
+
+        buttons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                let playerSelection = e.target.id;
+                let computerSelection = computerPlay();
+                playRound(playerSelection,computerSelection);
+                score.textContent = `Your Score: ${userScore} | Computer's Score: ${computerScore}`;
+                if(userScore == 5 || computerScore == 5) {
+                    endGame();
+                }
+            });
+        });
+
+        function endGame() {
+            weapon.setAttribute('style', 'display: none');
+            para.setAttribute('style', 'display: none');
+            score.appendChild(winner);
+            
+            if(userScore == 5) {
+                winner.textContent = 'Woohoo! You won!'
+            } else if(computerScore == 5) {
+                winner.textContent = 'Damn :/ Good luck next time!'
+            }
+            
+        }
+
+
+    </script>
+</body>
+</html>
